@@ -11,6 +11,10 @@ class ComputervsComputer():
         self.win = None
         self.game_data = []
         self.moves = 0
+        self.available_moves = []
+        for i in range(8):
+            for j in range(8):
+                self.available_moves.append((i, j))
 
     def play(self):
         '''Obtains move information when game is played through string inputs'''
@@ -35,7 +39,7 @@ class ComputervsComputer():
 
 
     def computer_move(self):
-        available_moves = self.check_available_moves(self.board)
+        available_moves = self.select_available_move(self.available_moves)
         self.move_position = tuple(available_moves[randint(0,len(available_moves)-1)])
         if self.whogoes == 1:
             self.player1move()
@@ -43,7 +47,7 @@ class ComputervsComputer():
             self.player2move()
 
     def computer_trap(self):
-        available_moves = self.check_available_moves(self.board)
+        available_moves = self.select_available_move(self.available_moves)
         self.trap_position = tuple(available_moves[randint(0,len(available_moves)-1)])
 
 
@@ -147,6 +151,7 @@ class ComputervsComputer():
                 if count == 5:
                     self.win = -1
                     break
+                
     def check_diag_win(self,player,position):
         row = position[0]
         col = position[1]
@@ -213,5 +218,5 @@ class ComputervsComputer():
                     self.win = -1
                     break
     @staticmethod
-    def check_available_moves(board):
-        return np.argwhere(board == 0)
+    def select_available_move(moves):
+        return moves.pop(random.randrange(len(moves)))
