@@ -1,23 +1,58 @@
-from CvsC import ComputervsComputer
+from fourbyfour import ComputervsComputer
 import numpy as np
-import codecs,json
-import os
+from math import floor
 def generate_data(size):
-    X_data = []
-    Y_data = []
+    positions = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
+    counts = []
     for i in range(size):
         Game = ComputervsComputer(i%2+1)
         Game.play()
-        #for j in range(len(Game.game_data)):
-        X_data.append(Game.game_data[-1])
-        Y_data.append(Game.win)
-    X_data = np.array(X_data)
-    Y_data = np.array(Y_data)
-    with open('X_data.npy','wb') as f:
-        np.save(f,X_data)
-    with open('Y_data.npy','wb') as f:
-        np.save(f,Y_data)
+        print(Game.board)
+        data = Game.game_data
+        for j in range(len(data)):
+            position = array_to_number(data[j])
+            check_list(positions[j],position,Game.win)
+
+    return positions
+
+def array_to_number(position):
+    number = 0
+    count = 0
+    for i in range(4):
+        for j in range(4):
+            number += position[i][j]*3**(15-count)
+            count += 1
+    return number
+
+def check_list(dic, position,win):
+    keys = list(dic.keys())
+    upper = len(keys)
+    lower = 0
+    init = False
+    while upper != lower:
+        mid = floor((upper + lower)/2)
+        if keys[mid] == position:
+            init = True
+            if win == 1:
+                dic[mid][0] += 1
+            elif win == 2:
+                dic[mid][1] += 1
+            break
+        elif keys[mid] > position:
+            upper = mid
+
+        else:
+            if lower == mid:
+                break
+            else:
+                lower = mid
 
 
+    if not init:
+        if win == 1:
+            dic[position] = [1,0]
+        elif win == 2:
+            dic[position] = [0,1]
 
-generate_data(10000)
+
+print(generate_data(100))
