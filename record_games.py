@@ -34,9 +34,9 @@ def check_list(dic, position,win):
         if keys[mid] == position:
             init = True
             if win == 1:
-                dic[mid][0] += 1
+                dic[keys[mid]][0] += 1
             elif win == 2:
-                dic[mid][1] += 1
+                dic[keys[mid]][1] += 1
             break
         elif keys[mid] > position:
             upper = mid
