@@ -1,8 +1,11 @@
+'NOT WORKING YET!'
+
 import tensorflow as tf
 import numpy as np
 from keras.layers import Dense
 from keras.layers import Dropout
 from keras.models import Sequential
+
 X_train = []
 Y_train = []
 trainingWeights = []
