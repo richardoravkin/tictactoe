@@ -3,6 +3,7 @@ from random import *
 import copy
 
 class ComputervsComputer():
+    'Tic tac toe on a 4x4 board'
     def __init__(self,whogoes):
         self.board = np.zeros((4,4), dtype = int)
         self.move_position = None
@@ -16,10 +17,9 @@ class ComputervsComputer():
                 self.available_moves.append((i, j))
 
     def play(self):
-        '''Obtains move information when game is played through string inputs'''
+        '''Play game and record game data'''
         self.computer_move()
         self.game_data.append(copy.deepcopy(self.board))
-
         self.moves += 1
         if self.win == None:
             if not self.moves == 16:
@@ -29,6 +29,7 @@ class ComputervsComputer():
 
 
     def computer_move(self):
+        'Perform move at random'
         move = self.select_available_move(self.available_moves)
 
         if self.whogoes == 1:
@@ -44,6 +45,7 @@ class ComputervsComputer():
 
 
     def check_win(self,player,position):
+        'Check if a player has won'
         self.check_column_win(player,position)
         if self.win == None:
             self.check_row_win(player,position)
@@ -51,6 +53,7 @@ class ComputervsComputer():
             self.check_diag_win(player,position)
 
     def check_column_win(self,player,position):
+        'Check if 3 consecutive pieces in a column'
         row = position[0]
         col = position[1]
         if player == 1:
@@ -87,6 +90,7 @@ class ComputervsComputer():
                     break
 
     def check_row_win(self,player,position):
+        'Check if 3 consecutive pieces in a row'
         row = position[0]
         col = position[1]
         if player == 1:
@@ -123,6 +127,7 @@ class ComputervsComputer():
                     break
 
     def check_diag_win(self,player,position):
+        'Check if 3 consecutive pieces in a both diagonals'
         row = position[0]
         col = position[1]
         if player == 1:
@@ -189,4 +194,5 @@ class ComputervsComputer():
                     break
     @staticmethod
     def select_available_move(moves):
+        'Return available move'
         return moves.pop(randrange(len(moves)))

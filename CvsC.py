@@ -17,7 +17,7 @@ class ComputervsComputer():
                 self.available_moves.append((i, j))
 
     def play(self):
-        '''Obtains move information when game is played through string inputs'''
+        '''Plays game of tic tac toe with itself'''
         #self.computer_trap()
         self.computer_move()
         self.game_data.append(copy.deepcopy(self.board))
@@ -29,16 +29,17 @@ class ComputervsComputer():
                 self.play()
             else:
                 self.win = 0
-                #self.game_end()
+
         elif self.win == 1:
             pass
-            #self.game_end()
+
         else:
             pass
-            #self.game_end()
+
 
 
     def computer_move(self):
+        'Selects move from available squares at random'
         available_moves = self.select_available_move(self.available_moves)
         self.move_position = tuple(available_moves[randint(0,len(available_moves)-1)])
         if self.whogoes == 1:
@@ -47,6 +48,7 @@ class ComputervsComputer():
             self.player2move()
 
     def computer_trap(self):
+        'Selects trap from available squares at random'
         available_moves = self.select_available_move(self.available_moves)
         self.trap_position = tuple(available_moves[randint(0,len(available_moves)-1)])
 
@@ -74,6 +76,7 @@ class ComputervsComputer():
 
 
     def check_win(self,player,position):
+        'Check if a player won the game'
         self.check_column_win(player,position)
         if self.win == None:
             self.check_row_win(player,position)
@@ -81,6 +84,7 @@ class ComputervsComputer():
             self.check_diag_win(player,position)
 
     def check_column_win(self,player,position):
+        'Checks if a player has 5 consecutive pieces in a column'
         row = position[0]
         col = position[1]
         if player == 1:
@@ -117,6 +121,7 @@ class ComputervsComputer():
                     break
 
     def check_row_win(self,player,position):
+        'Checks if a player has 5 consecutive pieces in a row'
         row = position[0]
         col = position[1]
         if player == 1:
@@ -151,8 +156,9 @@ class ComputervsComputer():
                 if count == 5:
                     self.win = -1
                     break
-                
+
     def check_diag_win(self,player,position):
+        'Checks if a player has 5 consecutive pieces in both diagonals'
         row = position[0]
         col = position[1]
         if player == 1:
@@ -219,4 +225,5 @@ class ComputervsComputer():
                     break
     @staticmethod
     def select_available_move(moves):
+        'Return a an available square'
         return moves.pop(random.randrange(len(moves)))

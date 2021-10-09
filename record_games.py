@@ -2,6 +2,7 @@ from fourbyfour import ComputervsComputer
 import numpy as np
 from math import floor
 def generate_data(size):
+    'Generate games and store positions in arrays '
     positions = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
     values = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
     counts = []
@@ -17,12 +18,14 @@ def generate_data(size):
     return positions,values
 
 def array_to_number(position):
+
     number = 0
     count = 0
     number = ''.join(map(str, position.flatten()))
     return int(number)
 
 def check_list(keys, values, position,win):
+    'Check list of positions and update values in log time complexity'
     upper = len(keys)
     lower = 0
     init = False
@@ -61,6 +64,7 @@ def check_list(keys, values, position,win):
 
 positions,values = generate_data(int(1e5))
 def write(positions,values):
+    'Write data in a text files'
     with open("train_data.txt", "w") as text_file1, open('test_data.txt','w') as text_file2:
         for i in range(len(positions)):
             length = len(positions[i])
@@ -80,6 +84,7 @@ def write(positions,values):
                 text_file2.write(string + str(positions[i][k])+ ':' + str([value1,value2])+':'+str((value1-value2)/(value1+value2))+':'+str(weight)+'\n')
 
 def set_weights(value1,value2,z = 1.645):
+    'Assign weights to data points by calculating a confidence interval of the standard normal distribution'
     n = value1 + value2
     div = n//5 + 1
     if div > 6:
