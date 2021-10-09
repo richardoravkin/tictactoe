@@ -4,7 +4,7 @@ import copy
 
 class ComputervsComputer():
     def __init__(self,whogoes):
-        self.board = np.zeros((4,4))
+        self.board = np.zeros((4,4), dtype = int)
         self.move_position = None
         self.whogoes = whogoes
         self.win = None

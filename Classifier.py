@@ -3,12 +3,28 @@ import numpy as np
 from keras.layers import Dense
 from keras.layers import Dropout
 from keras.models import Sequential
-with open('X_data.npy','rb') as f:
-    X_data = np.load(f)
-with open('Y_data.npy','rb') as f:
-    Y_data = np.load(f)
-
-print(len(X_data))
+X_train = []
+Y_train = []
+trainingWeights = []
+X_test = []
+Y_test = []
+with open('train_data.txt','r') as f1,open('test_data.txt','r') as f2:
+    for line in f1:
+        list1 = line.split(':')
+        x_data = list(list1[0])
+        x_data = list(map(int,x_data))
+        y_data = float(list1[2])
+        weight = int(list1[3])
+        X_train.append(x_data)
+        Y_train.append(y_data)
+        trainingWeights.append(weight)
+    for line in f2:
+        list1 = line.split(':')
+        x_data = list(list1[0])
+        x_data = list(map(int,x_data))
+        y_data = float(list1[2])
+        X_test.append(x_data)
+        Y_test.append(y_data)
 
 
 class Classifier:
@@ -18,34 +34,38 @@ class Classifier:
         self.numberOfInputs = numberOfInputs
         self.numberOfOutputs = numberOfOutputs
         self.model = Sequential()
-        self.model.add(Dense(256, activation='relu', input_shape=(numberOfInputs, )))
+        self.model.add(Dense(128, input_shape=(numberOfInputs,)))
+
         self.model.add(Dense(128, activation='relu'))
+
         self.model.add(Dense(128, activation='relu'))
+
         self.model.add(Dense(128, activation='relu'))
+
+
         self.model.add(Dense(128, activation='relu'))
+
         self.model.add(Dense(128, activation='relu'))
-        self.model.add(Dense(numberOfOutputs, activation='softmax'))
-        self.model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
-    def train(self, X_data,Y_data):
-        input = []
+        self.model.add(Dense(128, activation='relu'))
 
-        for data in X_data:
-            input.append(data.flatten())
+        self.model.add(Dense(128, activation='relu'))
 
 
-        X = np.array(input).reshape((-1, self.numberOfInputs))
-        y = tf.keras.utils.to_categorical(Y_data,num_classes = 3)
-        # Train and test data split
-        boundary = int(0.8 * len(X))
-        X_train = X[:boundary]
-        X_test = X[boundary:]
-        y_train = y[:boundary]
-        y_test = y[boundary:]
+        self.model.add(Dense(numberOfOutputs, activation='linear'))
+        self.model.compile(loss='mse', optimizer='rmsprop', metrics=['accuracy'])
 
-        self.model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=self.epochs, batch_size=self.batchSize)
+        #sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
+        #model.compile(loss='binary_crossentropy', optimizer=sgd)
 
+    def train(self, X_train,Y_train,X_test,Y_test,trainingWeights):
+        X_train = np.array(X_train)
+        Y_train = np.array(Y_train)
+        trainingWeights = np.array(trainingWeights)
+        X_test = np.array(X_test)
+        Y_test = np.array(Y_test)
 
+        self.model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=self.epochs, batch_size=self.batchSize, sample_weight = trainingWeights)
 
-NN = Classifier(64,3,32,10)
-NN.train(X_data,Y_data)
+NN = Classifier(16,1,32,50)
+NN.train(X_train,Y_train,X_test,Y_test,trainingWeights)
